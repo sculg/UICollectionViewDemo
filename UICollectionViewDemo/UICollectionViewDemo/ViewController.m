@@ -36,6 +36,7 @@
 
 - (void)setupSubView {
     [self.view addSubview:self.pageControl];
+    self.pageControl.currentPage = 0;
     [self.pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view);
         make.bottom.equalTo(self.view).mas_offset(-60);
@@ -58,6 +59,12 @@
     [cell setUpWithNum:self.dataArr[indexPath.row]];
     
     return cell;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat doublePage = scrollView.contentOffset.x/self.view.bounds.size.width;
+    int pageNum = (int)(doublePage + 0.5);
+    self.pageControl.currentPage = pageNum;
 }
 
 - (UICollectionView *)collectionView {
@@ -89,11 +96,10 @@
             _pageControl = [[UIPageControl alloc] initWithFrame:CGRectZero];
             _pageControl.hidesForSinglePage = YES;
             _pageControl.numberOfPages = (_dataArr.count % 9 == 0) ? (_dataArr.count/9): (_dataArr.count/9) + 1;
-            _pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
+            _pageControl.currentPageIndicatorTintColor = [UIColor redColor];
             _pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
             _pageControl.backgroundColor = [UIColor clearColor];
             _pageControl.userInteractionEnabled = NO;
-            
         }
     return _pageControl;
 }
